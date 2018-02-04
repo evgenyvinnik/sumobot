@@ -36,6 +36,12 @@ int dir1PinB = 32;
 int dir2PinB = 33;
 int speedPinB = 5; // Needs to be a PWM pin to be able to control motor speed
 
+// Infrared sensor
+int infraredSensorPin = 0;
+int infraredSensorValue = 0;
+
+long loopCounter = 0;
+
 void setup() {  // Setup runs once per reset
 // initialize serial communication @ 9600 baud:
 Serial.begin(9600);
@@ -52,6 +58,15 @@ pinMode(speedPinB,OUTPUT);
 }
 
 void loop() {
+
+loopCounter++;
+
+infraredSensorValue = analogRead(infraredSensorPin);
+
+if(loopCounter % 500 == 0) {
+	Serial.println(infraredSensorValue);
+}
+
 
 // Initialize the Serial interface:
 
