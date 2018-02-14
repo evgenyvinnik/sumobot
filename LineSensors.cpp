@@ -1,5 +1,5 @@
-#include "LineSensors.h"
 #include "Arduino.h"
+#include "LineSensors.h"
 
 void LineSensors::initSensors() {
   pinMode(lineSensorIRFrontRightPin, INPUT);
@@ -11,6 +11,8 @@ void LineSensors::initSensors() {
 void LineSensors::processSensors(long currentTime) {
   if(currentTime - timeLastRead > readingInterval) {
     readSensors();
+  }
+  if(currentTime - timeLastPrinted > printingInterval) {
     printValues();
   }
 }
@@ -38,5 +40,7 @@ void LineSensors::printValues() {
   Serial.println(lineSensorIRRearLeftValue);
 
   Serial.println();
+  
+  timeLastPrinted = millis();
 }
 

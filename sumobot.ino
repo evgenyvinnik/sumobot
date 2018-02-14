@@ -14,14 +14,16 @@ void setup() {
 
   motorsControl.initMotors();
   lineSensors.initSensors();
+  motorsControl.goForward(MotorsControl::maxSpeedValue/2);
 }
 
 void loop() {
   loopCounter++;
   currentTime = millis();
 
-  motorsControl.processUserInput();
   lineSensors.processSensors(currentTime);
+  motorsControl.adjustDirectionIfGettingOutOfArea(lineSensors, currentTime);
+//  motorsControl.processUserInput();
 //  distanceSensors.processSensors(currentTime);
 }
 

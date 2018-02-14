@@ -1,6 +1,8 @@
 #ifndef HEADER_MOTORS_CONTROL
 #define HEADER_MOTORS_CONTROL
 
+#include "LineSensors.h"
+
 class MotorsControl {
   public:
     // Declare L298N Dual H-Bridge Motor Controller directly since there is no library to load
@@ -27,11 +29,13 @@ class MotorsControl {
     const int dir2PinB = 33;
     const int speedPinB = 5; // Needs to be a PWM pin to be able to control motor speed
 
-    const int maxSpeedValue = 254;
+    static const int maxSpeedValue = 254;
 
     void initMotors();
     void processUserInput();
 
+    void goForward(int speed);
+    void goBackwards(int speed);
     void leftSideMotorSetForwardSpeed(int speed);
     void leftSideMotorSetBackwardsSpeed(int speed);
     void leftSideMotorStop();
@@ -39,6 +43,19 @@ class MotorsControl {
     void rightSideMotorSetBackwardsSpeed(int speed);
     void rightSideMotorStop();
     void stopAllMotors();
+    int normalizeSpeedValue(int speed);
+
+    void reverse(int duration);
+    void turnRight(int duration);
+    void turnLeft(int duration);
+
+    // ensure bot stays within the Sumobot ring
+    void adjustDirectionIfGettingOutOfArea(LineSensors lineSensors, long currentTime);
+
+    const int adjustDirectionReverseDuration = 600; //ms
+    const int adjustDirectionTurnDuration = 1000; //ms
+    const int directionAdjustmentTimeInterval = 100; // 100ms
+    long timeDirectionLastAdjusted = 0;
 };
    
 #endif
