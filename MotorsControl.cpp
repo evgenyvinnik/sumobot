@@ -17,12 +17,12 @@ void MotorsControl::initMotors() {
 // Left-side wheels (motor 1):
 // 1 - forward;
 // 2 - stop;
-// 3 - backwards.
+// 3 - backward.
 //
 // Right side wheels (motor 2):
 // 4 - forward;
 // 5 - stop;
-// 6 - backwards.
+// 6 - backward.
 void MotorsControl::processUserInput() {
   if (Serial.available() <= 0) return;
 
@@ -37,7 +37,7 @@ void MotorsControl::processUserInput() {
       break;
   
     case '3':
-      leftSideMotorSetBackwardsSpeed(maxSpeedValue);
+      leftSideMotorSetBackwardSpeed(maxSpeedValue);
       break;
   
     case '4':
@@ -49,7 +49,7 @@ void MotorsControl::processUserInput() {
       break;
   
     case '6':
-      rightSideMotorSetBackwardsSpeed(maxSpeedValue);
+      rightSideMotorSetBackwardSpeed(maxSpeedValue);
       break;
   
     default:
@@ -57,14 +57,16 @@ void MotorsControl::processUserInput() {
   }
 }
 
-void MotorsControl::goForward(int speed) {
+void MotorsControl::goForward(int speed, int duration) { // duration in ms
   leftSideMotorSetForwardSpeed(speed);
   rightSideMotorSetForwardSpeed(speed);
+  if(duration > 0) delay(duration);
 }
 
-void MotorsControl::goBackwards(int speed) {
-  leftSideMotorSetBackwardsSpeed(speed);
-  rightSideMotorSetBackwardsSpeed(speed);
+void MotorsControl::goBackward(int speed, int duration) {
+  leftSideMotorSetBackwardSpeed(speed);
+  rightSideMotorSetBackwardSpeed(speed);
+  if(duration > 0) delay(duration);
 }
 
 void MotorsControl::leftSideMotorSetForwardSpeed(int speed) {
@@ -76,12 +78,12 @@ void MotorsControl::leftSideMotorSetForwardSpeed(int speed) {
 //  Serial.println("   ");
 }
 
-void MotorsControl::leftSideMotorSetBackwardsSpeed(int speed) {
+void MotorsControl::leftSideMotorSetBackwardSpeed(int speed) {
   speed = normalizeSpeedValue(speed);
   analogWrite(speedPinA, speed);
   digitalWrite(dir1PinA, LOW);
   digitalWrite(dir2PinA, HIGH);
-//  Serial.println("Left-side wheels (motor 1) backwards");
+//  Serial.println("Left-side wheels (motor 1) backward");
 //  Serial.println("");
 }
 
@@ -102,12 +104,12 @@ void MotorsControl::rightSideMotorSetForwardSpeed(int speed) {
 //  Serial.println("   ");
 }
 
-void MotorsControl::rightSideMotorSetBackwardsSpeed(int speed) {
+void MotorsControl::rightSideMotorSetBackwardSpeed(int speed) {
   speed = normalizeSpeedValue(speed);
   analogWrite(speedPinB, speed);
   digitalWrite(dir1PinB, LOW);
   digitalWrite(dir2PinB, HIGH);
-//  Serial.println("Right-side wheels (motor 2) backwards");
+//  Serial.println("Right-side wheels (motor 2) backward");
 //  Serial.println("   ");
 }
 
@@ -132,20 +134,14 @@ int MotorsControl::normalizeSpeedValue(int speed) {
   return speed;
 }
 
-void MotorsControl::reverse(int duration) {
-  leftSideMotorSetBackwardsSpeed(maxSpeedValue/2);
-  rightSideMotorSetBackwardsSpeed(maxSpeedValue/2);
-  delay(duration);
-}
-
 void MotorsControl::turnRight(int duration) {
   leftSideMotorSetForwardSpeed(maxSpeedValue/2);
-  rightSideMotorSetBackwardsSpeed(maxSpeedValue/2);
+  rightSideMotorSetBackwardSpeed(maxSpeedValue/2);
   delay(duration);
 }
 
 void MotorsControl::turnLeft(int duration) {
-  leftSideMotorSetBackwardsSpeed(maxSpeedValue/2);
+  leftSideMotorSetBackwardSpeed(maxSpeedValue/2);
   rightSideMotorSetForwardSpeed(maxSpeedValue/2);
   delay(duration);
 }
@@ -162,18 +158,33 @@ void MotorsControl::adjustDirectionIfGettingOutOfArea(LineSensors lineSensors, l
 
   // front left sensor detected a white line, reverse and turn to the right
   if (lineSensors.lineSensorIRFrontLeftValue == 0) {
-    reverse(adjustDirectionReverseDuration);
+    goBackward(maxSpeedValue/2, adjustDirectionReverseDuration);
     turnRight(adjustDirectionTurnDuration);
     goForward(maxSpeedValue/2);
   }
 
   // front right sensor detected a white line, reverse and turn to the left
   else if (lineSensors.lineSensorIRFrontRightValue == 0) {
-    reverse(adjustDirectionReverseDuration);
+    goBackward(maxSpeedValue/2, adjustDirectionReverseDuration);
     turnLeft(adjustDirectionTurnDuration);
     goForward(maxSpeedValue/2);
   }
-  else { // keep going forward
+
+  // rear left sensor detected a white line, reverse and turn to the right
+  else if (lineSensors.lineSensorIRRearLeftValue == 0) {
+    goForward(maxSpeedValue/2, adjustDirectionReverseDuration);
+    turnRight(adjustDirectionTurnDuration);
+    goBackward(maxSpeedValue/2);
+  }
+
+  // rear right sensor detected a white line, reverse and turn to the left
+  else if (lineSensors.lineSensorIRRearRightValue == 0) {
+    goForward(maxSpeedValue/2, adjustDirectionReverseDuration);
+    turnLeft(adjustDirectionTurnDuration);
+    goBackward(maxSpeedValue/2);
+  }
+  
+  else {
     goForward(maxSpeedValue/2);
   }
 

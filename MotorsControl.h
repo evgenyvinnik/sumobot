@@ -34,18 +34,17 @@ class MotorsControl {
     void initMotors();
     void processUserInput();
 
-    void goForward(int speed);
-    void goBackwards(int speed);
+    void goForward(int speed, int duration = 0);
+    void goBackward(int speed, int duration = 0);
     void leftSideMotorSetForwardSpeed(int speed);
-    void leftSideMotorSetBackwardsSpeed(int speed);
+    void leftSideMotorSetBackwardSpeed(int speed);
     void leftSideMotorStop();
     void rightSideMotorSetForwardSpeed(int speed);
-    void rightSideMotorSetBackwardsSpeed(int speed);
+    void rightSideMotorSetBackwardSpeed(int speed);
     void rightSideMotorStop();
     void stopAllMotors();
     int normalizeSpeedValue(int speed);
 
-    void reverse(int duration);
     void turnRight(int duration);
     void turnLeft(int duration);
 
