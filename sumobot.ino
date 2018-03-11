@@ -1,6 +1,7 @@
 #include "MotorsControl.h"
 #include "LineSensors.h"
 #include "DistanceSensors.h"
+#include "UltraSoundSensors.h"
 
 long loopCounter = 0;
 long currentTime = 0;
@@ -8,6 +9,7 @@ long currentTime = 0;
 MotorsControl motorsControl;
 LineSensors lineSensors;
 DistanceSensors distanceSensors;
+UltraSoundSensors ultraSoundSensors;
 
 void setup() {
   Serial.begin(9600); // initialize serial communication @ 9600 baud
@@ -24,6 +26,5 @@ void loop() {
   lineSensors.processSensors(currentTime);
   motorsControl.adjustDirectionIfGettingOutOfArea(lineSensors, currentTime);
 //  motorsControl.processUserInput();
-//  distanceSensors.processSensors(currentTime);
+  ultraSoundSensors.processSensors(currentTime);
 }
-
