@@ -70,7 +70,7 @@ for i = 1:maxsteps
     set(h_text, 'String', info_s);
     
     if(figure2), drawnow; end      
-    if( ~isempty(find(crash,1)) ), break; end 
+    if( ~isempty(find(crash(1),1)) ), break; end  %End of trial when crashed into an obstacle
 end
 
 cost = cost/i;
