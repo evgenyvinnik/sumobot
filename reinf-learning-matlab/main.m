@@ -7,6 +7,12 @@ while(true)
     
     pause(0.1);
     
+    %disp("pong")
+    if( strcmp(mode,'Exit') )
+      %disp("exiting for real")
+      break
+    end
+    
     % Reset for Q-tabell metoden
     if( strcmp(mode,'Reset1') )
         

@@ -1,0 +1,1 @@
+function closeFigure(src, evt, fig1, fig2)    global mode    mode = 'Exit';    delete(fig1);    delete(fig2);    %disp("exiting2!");end

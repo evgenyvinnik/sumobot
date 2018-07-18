@@ -4,7 +4,7 @@ function [h_plot1, h_plot2, h_text1, h_text2, h_button1, h_button2] = createSimu
                                                                                     
     close all;
     
-    figure('Position', [350, 60, 1050, 850]); 
+    fig1 = figure('Position', [350, 60, 1050, 850])%, 'CloseRequestFcn', @closeFigure); 
 
     %% ----- Tab 1: Q-Table
     
@@ -51,12 +51,14 @@ function [h_plot1, h_plot2, h_text1, h_text2, h_button1, h_button2] = createSimu
                                 'Enable', 'off', 'String', 'Save', 'Position', [920, 140, 90, 45]);
                             
     reset_button1 = uicontrol(QTable_panel, 'Style', 'pushbutton', 'BackGroundColor', [0.4,0.4,0.4],...
-                                'Enable', 'off', 'String', 'Reset', 'Position', [855, 60, 100, 50]);
-    
+                                'Enable', 'off', 'String', 'Reset', 'Position', [800, 60, 90, 45]);
+                                
+    exit_button1 = uicontrol(QTable_panel, 'Style', 'pushbutton', 'BackGroundColor', [0.4,0.4,0.4],...
+                                'Enable', 'on', 'String', 'Exit', 'Position', [920, 60, 90, 45]);
 
     %% ----- Tab 2: Neural Network
     
-    figure('Position', [350, 60, 1050, 850]);
+    fig2 = figure('Position', [350, 60, 1050, 850])%, 'CloseRequestFcn', @closeFigure); 
     NN_panel = uipanel('title', 'Neural Network method');
 
     plot4 = axes('parent', NN_panel, 'XLim', xlimit, 'YLim', ylimit,'Box', 'on', ...
@@ -105,7 +107,10 @@ function [h_plot1, h_plot2, h_text1, h_text2, h_button1, h_button2] = createSimu
                                 'Enable', 'off', 'String', 'Save', 'Position', [920, 140, 90, 45]);                        
                             
     reset_button2 = uicontrol(NN_panel, 'Style', 'pushbutton', 'BackGroundColor', [0.4,0.4,0.4],...
-                                'Enable', 'off', 'String', 'Reset', 'Position', [855, 60, 100, 50]);
+                                'Enable', 'off', 'String', 'Reset', 'Position', [800, 60, 90, 45]);
+    
+    exit_button2 = uicontrol(NN_panel, 'Style', 'pushbutton', 'BackGroundColor', [0.4,0.4,0.4],...
+                                'Enable', 'on', 'String', 'Exit', 'Position', [920, 60, 90, 45]);
     
     %% ----- Callback functions
     
@@ -119,6 +124,9 @@ function [h_plot1, h_plot2, h_text1, h_text2, h_button1, h_button2] = createSimu
     set(upload_button1, 'callback', @funUpload1);
     set(save_button1, 'callback', @funSave1);
     
+    set(exit_button1, 'callback', {@closeFigure, fig1, fig2});
+
+    
     set(start_button2, 'callback', {@funStart2, start_button1, pause_button1, reset_button1, pause_button2,... 
                                     reset_button2, upload_button1, save_button1, upload_button2, save_button2});
     
@@ -130,6 +138,8 @@ function [h_plot1, h_plot2, h_text1, h_text2, h_button1, h_button2] = createSimu
     set(upload_button2, 'callback', @funUpload2);
     set(save_button2, 'callback', @funSave2);
     
+    set(exit_button2, 'callback', {@closeFigure, fig1, fig2});
+    
     %% ----- Headers
     h_plot1 = [plot1, plot2, plot3]; 
     h_plot2 = [plot4, plot5, plot6];
@@ -139,3 +149,4 @@ function [h_plot1, h_plot2, h_text1, h_text2, h_button1, h_button2] = createSimu
     h_button2 = [start_button2, pause_button2, reset_button2, upload_button2, save_button2];
 
 end
+
