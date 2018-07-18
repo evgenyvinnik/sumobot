@@ -58,7 +58,7 @@ function [sensor_value, crash] = sensorValues(sensor_vertices, obstacle, shape, 
         if( ~isempty(I) )
             
             %Beregne sensorverdien
-            sensor_value = min(dist([x(I), y(I)], [Qx(1); Qy(1)]));
+            sensor_value = min(norm([x(I), y(I)]' - [Qx(1); Qy(1)]));
             
             %Krasj dersom sensor verdien gir mindre enn dist_crash
             if(sensor_value < dist_crash)
@@ -112,7 +112,7 @@ function [sensor_value, crash] = sensorValues(sensor_vertices, obstacle, shape, 
             
             if( ~isempty(I) )
                 
-                temp = min(dist([x(I), y(I)], [Qx(1); Qy(1)]));
+                temp = min(norm([x(I), y(I)]' - [Qx(1); Qy(1)]));
                 
                 if(sensor_value > temp)
                     
@@ -159,7 +159,7 @@ function [sensor_value, crash] = sensorValues(sensor_vertices, obstacle, shape, 
 
         if( ~isempty(I) )
 
-            temp = min(dist([x(I), y(I)], [Qx(1); Qy(1)]));
+            temp = min(norm([x(I), y(I)]' - [Qx(1); Qy(1)]));
             
             if( sensor_value > temp)
                 

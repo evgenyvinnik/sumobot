@@ -75,9 +75,9 @@ function [state_index, k1, k2, k3, k4] = discretization(state_space, sensor, dyn
     end
     
     % Find the state index in the Q-table
-    if(strcmp(stadium_option,'Static')), [d, index] = min(dist(state_space, [k1, k2, k3, k4]'));
+    if(strcmp(stadium_option,'Static')), [d, index] = min(norm(state_space - [k1, k2, k3, k4]));
         
-    elseif(strcmp(stadium_option,'Dynamic')), [d, index] = min(dist(state_space, [k1, k2, k3, k4, k5, k6]'));
+    elseif(strcmp(stadium_option,'Dynamic')), [d, index] = min(norm(state_space - [k1, k2, k3, k4, k5, k6]));
         
     end
     

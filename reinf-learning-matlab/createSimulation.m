@@ -5,13 +5,10 @@ function [h_plot1, h_plot2, h_text1, h_text2, h_button1, h_button2] = createSimu
     close all;
     
     figure('Position', [350, 60, 1050, 850]); 
-    h_tab = uitabgroup; 
 
     %% ----- Tab 1: Q-Table
     
-    tab1 = uitab(h_tab, 'title', 'Q-table');
-
-    QTable_panel = uipanel(tab1, 'title', 'Q-table method');
+    QTable_panel = uipanel('title', 'Q-table method');
 
     plot1 = axes('parent', QTable_panel,'XLim', xlimit, 'YLim', ylimit,'Box', 'on', ...
                 'Position', [0.06, 0.57, 0.4, 0.4]);
@@ -59,9 +56,8 @@ function [h_plot1, h_plot2, h_text1, h_text2, h_button1, h_button2] = createSimu
 
     %% ----- Tab 2: Neural Network
     
-    tab2 = uitab(h_tab, 'title','Neural Network');
-
-    NN_panel = uipanel(tab2, 'title', 'Neural Network method');
+    figure('Position', [350, 60, 1050, 850]);
+    NN_panel = uipanel('title', 'Neural Network method');
 
     plot4 = axes('parent', NN_panel, 'XLim', xlimit, 'YLim', ylimit,'Box', 'on', ...
                 'Position', [0.06, 0.57, 0.4, 0.4]);
