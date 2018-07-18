@@ -48,7 +48,8 @@ function [sensor, crash] = checkCrash(car, obstacle_polygon, obstacle_circle)
     for i = 1:n_sensors
         
         % Get vertices of the sensors
-        D = get(car(i+1),'Vertices');
+        D = [get(car(i+1),'XData')', get(car(i+1),'YData')'];
+
         sensor_temp = 0;
         
         % For each sensor, check collision with all the obstacles

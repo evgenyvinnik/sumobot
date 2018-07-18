@@ -25,11 +25,11 @@ function h = createCarCircle(radius, sensor_lengde, color)
     end
 
     % Create sensors
-    L_h1 = patch(x2', y1', 'k');
-    L_h2 = patch(x3', y2', 'k');
-    L_h3 = patch(x1', y3', 'k');
-    L_h4 = patch(x3', y4', 'k');
-    L_h5 = patch(x2', y5', 'k');
+    L_h1 = line(x2', y1');
+    L_h2 = line(x3', y2');
+    L_h3 = line(x1', y3');
+    L_h4 = line(x3', y4');
+    L_h5 = line(x2', y5');
 
     h = [car ,L_h1, L_h2, L_h3, L_h4, L_h5];    
 end
