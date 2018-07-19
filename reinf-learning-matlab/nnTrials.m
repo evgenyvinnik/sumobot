@@ -45,7 +45,7 @@ for i = 1:maxsteps
     
     tot_rot = doActionCircle(a, wheel_radius, L, tot_rot, h_car);   
     [sensor, crash] = checkCrash(h_car, h_poly, h_circ);    
-    reward = nnGetReward(a, crash);  
+    reward = nnGetReward(a, sensor, crash);
     tot_reward = tot_reward + reward;
     
     % Calculate Q_estimat
