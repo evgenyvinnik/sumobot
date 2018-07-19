@@ -1,13 +1,13 @@
 function [sensor_value, crash] = sensorValues(sensor_vertices, obstacle, shape, dist_crash)
 
-    %Funksjon til å finne avstanden mellom agent og hindringer via sensorer
+    %Function to find the distance between agent and obstructions via sensors
 
     crash = false;
 
     P = obstacle;                   %hindringer
     Qx = sensor_vertices(:,1);      %x-punktene til sensor
     Qy = sensor_vertices(:,2);      %y-punktene til sensor
-    sensor_value = norm([Qx(end) - Qx(1), Qy(end) - Qy(1)]);    %lengden på sensoren
+    sensor_value = norm([Qx(end) - Qx(1), Qy(end) - Qy(1)]);    %length of the sensor
 
     Qx_min = min(Qx);               
     Qx_max = max(Qx);
@@ -21,12 +21,12 @@ function [sensor_value, crash] = sensorValues(sensor_vertices, obstacle, shape, 
     n_x = length(x);        
     dist_between = 0.2;     %lengde mellom sensor og hindring
 
-    %Beregne ligningen for sensoren (Rett linje)
+    %Calculate the Equation for the Sensor (Straight Line)
     b = Qy(end)- Qy(1);
     c = Qx(end)- Qx(1);
 
     if( c ~= 0 )
-        a = b/c;                        %Stigningstall
+        a = b/c;                        %Slope
         y = a.*(x - Qx(1)) + Qy(1);     
     else
         n_points = length(y);
@@ -58,7 +58,9 @@ function [sensor_value, crash] = sensorValues(sensor_vertices, obstacle, shape, 
         if( ~isempty(I) )
             
             %Beregne sensorverdien
-            sensor_value = min(norm([x(I), y(I)]' - [Qx(1); Qy(1)]));
+            %points of sensor vector (out of 7000) that intersect with this circle
+            intersect_points = [x(I), y(I)]' - [Qx(1); Qy(1)]; 
+            sensor_value = min(sqrt(sum((intersect_points - [0;0]) .^ 2, 1)))
             
             %Krasj dersom sensor verdien gir mindre enn dist_crash
             if(sensor_value < dist_crash)
@@ -88,7 +90,7 @@ function [sensor_value, crash] = sensorValues(sensor_vertices, obstacle, shape, 
                 x_limit1 = min([P(i,1), P(i+1,1)]);     %x-min grense
                 x_limit2 = max([P(i,1), P(i+1,1)]);     %x-maks grense
 
-                %begrense x-verdiene til å ligge mellom x-min og x-maks
+                %limit x values to lie between x-min and x-max
                 I = (x_limit1 < x) & (x < x_limit2);    
 
                 f(I) = a.*(x(I) - P(i,1)) + P(i,2);     %funksjonen f(x)
@@ -99,7 +101,7 @@ function [sensor_value, crash] = sensorValues(sensor_vertices, obstacle, shape, 
                 y_limit1 = min([P(i,2), P(i+1,2)]);     %y-min grense
                 y_limit2 = max([P(i,2), P(i+1,2)]);     %y-maks grense
             
-                %begrense y-verdiene til å ligge mellom y-min og y-maks
+                %limit x values to lie between y-min and y-max
                 I = (y_limit1 < y) & (y < y_limit2);
                 
                 %differansen mellom agentens x-punkter og x-punktene til hindringen
@@ -112,11 +114,13 @@ function [sensor_value, crash] = sensorValues(sensor_vertices, obstacle, shape, 
             
             if( ~isempty(I) )
                 
-                temp = min(norm([x(I), y(I)]' - [Qx(1); Qy(1)]));
+                %points of sensor vector (out of 7000) that intersect with this obstacle edge
+                intersect_points = [x(I), y(I)]' - [Qx(1); Qy(1)];
+                temp = min(sqrt(sum((intersect_points - [0;0]) .^ 2, 1)))
                 
                 if(sensor_value > temp)
-                    
-                    sensor_value = temp;        %finne minste sensorverdien mellom agenten og kantene av hindringen               
+                    %Find the lowest sensor value between the agent and the edges of the obstacle
+                    sensor_value = temp;
                 end
 
                 if(sensor_value < dist_crash)
@@ -127,7 +131,7 @@ function [sensor_value, crash] = sensorValues(sensor_vertices, obstacle, shape, 
 
         end
         
-        %Samme metode som for løkka over, men nå for siste kanten av hindringen 
+        %Same method as above, but now for the last edge of the obstacle
         f = ones(n_x,1);
         g = ones(n_x,1);
         b = P(n_punkter, 2) - P(1, 2);
@@ -158,8 +162,9 @@ function [sensor_value, crash] = sensorValues(sensor_vertices, obstacle, shape, 
         I = find( g < dist_between);
 
         if( ~isempty(I) )
-
-            temp = min(norm([x(I), y(I)]' - [Qx(1); Qy(1)]));
+            %points of sensor vector (out of 7000) that intersect with this obstacle edges
+            intersect_points = [x(I), y(I)]' - [Qx(1); Qy(1)];
+            temp = min(sqrt(sum((intersect_points - [0;0]) .^ 2, 1)))
             
             if( sensor_value > temp)
                 

@@ -3,7 +3,7 @@ function [sensor, crash] = checkCrash(car, obstacle_polygon, obstacle_circle)
     %% ----- Initialization
 
     A = get(car(1),'Vertices');     %Get vertices of the vehicle
-    dist_crash = 1.5;               %Sensor distance (1.5 = 15cm) for crash
+    dist_crash = 10;                %Sensor distance (10 = 100cm) for crash
     obs_crash = false;              %Obstacle crash
     sens_crash = false;             %Crash sensor values are below 1.5.
     status = true;                  %Help variable
@@ -67,8 +67,6 @@ function [sensor, crash] = checkCrash(car, obstacle_polygon, obstacle_circle)
             end
         end
 
-        if( ~sens_crash )
-
             for k = (j+1):(j + n_polygons)
 
                 B = get(obstacle_polygon(k-j), 'Vertices');
@@ -80,7 +78,6 @@ function [sensor, crash] = checkCrash(car, obstacle_polygon, obstacle_circle)
                     sens_crash = true;
                 end
             end
-        end
         
         % store the lowest sensor value
         sensor(i) = min(sensor_temp);

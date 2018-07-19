@@ -1,6 +1,6 @@
 function crash = obstacleCrash(car, obstacle, shape)
     
-    %Funksjon til å sjekke crash mellom agenten og hindringene(ikke sensorer)
+    %Function to check crash between agent and obstacles (not sensors)
 
 	crash = false;
     
@@ -18,15 +18,15 @@ function crash = obstacleCrash(car, obstacle, shape)
         centre = [a, b];
         radius = norm([P(1,1) - centre(1), P(1,2) - centre(2)] );
         
-        %Beregne sirkel funksjonene til hindringen P
+        %Calculate the circle functions of the obstacle P
 		f1 =  sqrt( radius.^2 - (x - a).^2 ) + b;
 		f2 = -sqrt( radius.^2 - (x - a).^2 ) + b;
         
-        %Sjekker differansen mellom sensorens funksjon y og hindringens funksjon f
+        %Checks the difference between sensor function y and obstacle function f
 		g1 = abs(y-f1);
 		g2 = abs(y-f2);
         
-        %Dersom differansen er mindre enn dist_between gir sensoren utslag
+        %If the difference is less than dist_between, the sensor causes crash
         if( ~isempty(find( g1 < dist_between, 1)) || ~isempty(find( g2 < dist_between, 1)) )
             
             crash = true;
@@ -37,7 +37,7 @@ function crash = obstacleCrash(car, obstacle, shape)
 
 		n_punkter = size(P,1);
         
-        %Finne funksjonene f(x) = a*(x-x0) + f(x0) for kantene av hindringen
+        %Find the function f(x) = a*(x-x0) + f(x0) for the edges of the obstacle
         for i = 1:n_punkter-1
             
             g = [];
@@ -51,13 +51,13 @@ function crash = obstacleCrash(car, obstacle, shape)
                 x_limit1 = min([P(i,1), P(i+1,1)]);         %x-min grense
                 x_limit2 = max([P(i,1), P(i+1,1)]);         %x-maks grense
                 
-                %begrense x-verdiene til å ligge mellom x-min og x-maks
+                %limit x values to lie between x-min and x-max
                 I = find((x_limit1 < x) & (x < x_limit2) );   
                 
                 if( ~isempty(I) )
                     
                     f = a.*(x(I) - P(i,1)) + P(i,2);        %funksjonen f(x)
-                    g = abs(y(I) - f);                      %diffensen mellom y og f(x)
+                    g = abs(y(I) - f);                      %the difference between y and f (x)
                 end
 
             else
@@ -65,7 +65,7 @@ function crash = obstacleCrash(car, obstacle, shape)
                 y_limit1 = min([P(i,2), P(i+1,2)]);         %y-min grense
                 y_limit2 = max([P(i,2), P(i+1,2)]);         %y-maks grense
                 
-                %begrense y-verdiene til å ligge mellom y-min og y-maks
+                %limit y-values to lie between y-min and y-max
                 I = find( (y_limit1 < y) & (y < y_limit2) );    
                 
                 if( ~isempty(I) )
@@ -76,7 +76,7 @@ function crash = obstacleCrash(car, obstacle, shape)
                 
             end
 			
-            %Sjekke om g har noen verdier under dist_between
+            %Check if g has any values below dist_between
             if( ~isempty(find( g < dist_between, 1)) )
                     
                 crash = true;
@@ -85,7 +85,7 @@ function crash = obstacleCrash(car, obstacle, shape)
             
         end
         
-        %Samme metode som for løkka over, men nå for siste kanten av hindringen
+        %Same method as above, but now for the last edge of the obstacle
         g = [];
         b = P(n_punkter, 2) - P(1, 2);
         c = P(n_punkter, 1) - P(1, 1);

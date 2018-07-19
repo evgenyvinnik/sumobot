@@ -267,7 +267,7 @@ while(true)
             h_car2 = createCarCircle(radius, sensor_lengde, 'b');
             drawnow;
             
-            if( strcmp(mode,'Pause2') ), break; end
+            if( strcmp(mode,'Pause2') || strcmp(mode,'Exit')), break; end
             if(T2 > 1.0e-3), T2 = 0.95*T2; end
             
             info_s1 = sprintf('%s%11d%21s%13d%22s%10.2f', 'Trials:', j, 'Steps:', steps2, 'Total reward:', reward2);
